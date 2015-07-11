@@ -1,0 +1,16 @@
+{
+  "name": "websocket",
+  "version": "1.0.0",
+  "description": "try websocket",
+  "main": "websocket1.js",
+  "scripts": {
+    "test": "go"
+  },
+  "author": "shaomingquan",
+  "license": "ISC",
+  "dependencies" : {
+  	"socket.io" : "*",
+  	"polling" : "*",
+    "uuid" : "*"
+  }
+}

@@ -1,0 +1,104 @@
+<!-- polling.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+	<form action="" id="form">
+		<input type="hidden" id="ID" value="XXXXX">
+		<input type="text" id="msg">
+	</form>
+	<ul id="msgList">
+		
+	</ul>
+	<script>
+
+		var name = prompt("what is your name?");
+
+		var $ = document.getElementById;
+		var form = $.call(document ,"form");
+		var msg = $.call(document ,"msg");
+		var msgList = $.call(document ,"msgList");
+
+		var connId = $.call(document ,"ID").value;
+
+		var render = renderIt("msgList");
+
+		ajaxGetMsg();
+
+		ajaxSendMsg();
+
+		killConn();
+
+		function ajaxSendMsg(){
+
+			form.onsubmit = function(){
+
+				var req = new XMLHttpRequest();
+				req.open("GET", "http://localhost:3000/sendMsg?name="+name+"&content="+msg.value + "&ID=" + connId, true);
+	            req.send();
+
+	            render({
+	            	name : name ,
+	            	content : msg.value
+	            });
+
+				return false;
+
+			}
+
+		}
+
+		function ajaxGetMsg(){
+
+			var req = new XMLHttpRequest();
+	        req.onreadystatechange = function () {
+	            if (req.readyState == 4) {
+	                if (req.status == 200) {
+	                	render(eval("("+req.responseText+")"));
+	                	ajaxGetMsg();
+	                }
+	            }
+	        }
+
+            req.open("GET", "http://localhost:3000/getMsg?ID=" + connId);
+            req.send();
+
+		}
+
+		function killConn(){
+			window.onbeforeunload = function(){
+				var req = new XMLHttpRequest();
+				req.open("GET", "http://localhost:3000/kill?ID=" + connId ,false);
+				req.send();
+			}
+		}
+
+		function renderIt(ul){
+			var ul = document.getElementById(ul);
+			return function(data){
+				var nameContent = document.createElement("b");
+				var contentContent = document.createElement("span");
+				var li = document.createElement("li");
+
+				var name = document.createTextNode(data.name);
+				var content = document.createTextNode("："+data.content);
+
+				nameContent.appendChild(name);
+				contentContent.appendChild(content);
+
+				li.appendChild(nameContent);
+				li.appendChild(contentContent);
+
+				ul.appendChild(li);
+			}
+		}
+
+	</script>
+</body>
+</html>
