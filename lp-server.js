@@ -1,15 +1,17 @@
-var net = require("net");
 var http = require("http");
+
 var polling = require("polling");
+
 var uuid = require("uuid");
-var ee = new require("events").EventEmitter();
+
+var events = require("events");
+var ee = new events.EventEmitter();
+
+var aa = "123"
 
 var lpGenerator = function(config){
 	var lp = new LP(config);
-    return {
-        on : lp.on ,
-        listen : lp.listen
-    }
+    return lp;
 }
 
 function LP(config){
@@ -25,9 +27,10 @@ LP.prototype.on = function(event ,callback){
     if(this.goodEvents.indexOf(event) < 0){
         throw new Error("invalid event type");
     }
+    console.log(aa);
     ee.on(event ,callback);
 
-    if(events.toUpperCase() == "CONNECTION"){
+    if(event.toUpperCase() == "CONNECTION"){
         this.init();
     }
 }
@@ -94,6 +97,7 @@ LP_http.prototype.init = function(){
             ee.emit(id + "_" + interface ,data);
             res.end();
         }else if(method == "on"){
+            res.sett
             var pid = uuid.v1();
 
             polling.on(id,res)
@@ -136,3 +140,5 @@ function getParams(url){
     }
     return result;
 }
+
+module.exports = lpGenerator;
