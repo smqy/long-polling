@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../../lp-client.js"></script>
+    <script>
+        var name = prompt("input your name");
+
+        var lpClient = new LP(3000 ,"localhost");
+
+        var msgContent = document.getElementById("msgContent");
+
+        lpClient.on("serverMsg" ,function(data){
+            msgContent.innerHTML = msgContent.innerHTML +
+                    "<li><b>"+data.name+"</b>"+data.msg+"</li>"
+        })
+
+        document.getElementById("send").onclick = function(){
+            var msg = document.getElementById("msg").value;
+            msgContent.innerHTML = msgContent.innerHTML +
+                    "<li><i>"+name+"</i>"+msg+"</li>"
+            lpClient.emit("clientMsg" ,{
+                name : name ,
+                msg : msg
+            })
+        }
+    </script>
+</head>
+<body>
+<input type="text" placeholder="msg" id="msg"/>
+<input type="button" value="send" id="send"/>
+<ul id="msgContent">
+
+</ul>
+</body>
+</html>
