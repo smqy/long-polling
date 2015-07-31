@@ -37,22 +37,22 @@ LP.prototype.listen = function(port ,callback){
     this.http.listen(port ,callback);
 }
 
-function FakeSocket(){
+function Socket(){
     //add this to collection
-    FakeSocket.prototype.entities.push(this);
+    Socket.prototype.entities.push(this);
 }
 
-FakeSocket.prototype.entities = [];
+Socket.prototype.entities = [];
 
-FakeSocket.prototype.on = function(event ,callback){
+Socket.prototype.on = function(event ,callback){
     ee.on([this.id,event].join("_"),callback);
 }
 
-FakeSocket.prototype.emit = function(event ,data){
+Socket.prototype.emit = function(event ,data){
     ee.emit([this.id,event].join("_") ,data);
 }
 
-FakeSocket.prototype.broadcast = function(event ,data){
+Socket.prototype.broadcast = function(event ,data){
     //trigger all socket's event ,except this
     var that = this;
     this.entities.forEach(function(socket){
@@ -113,7 +113,7 @@ LP_http.prototype.init = function(){
             })
         }else if(method == "conn"){
             //new "socket"
-            var currentClient = new FakeSocket();
+            var currentClient = new Socket();
             currentClient.id = uuid.v1();
 
             //send the "socket" to the connetion callback, then socket run
@@ -123,7 +123,7 @@ LP_http.prototype.init = function(){
             res.end(currentClient.id);
         }else if(method == "disconn"){
             //kick the id socket
-            var fss = FakeSocket.prototype.entities;
+            var fss = Socket.prototype.entities;
             var length = fss.length;
             var i;
             for(i = 0 ; i < length ; i ++){
