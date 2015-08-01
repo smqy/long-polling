@@ -23,7 +23,6 @@
         callbackOrigin = callback;
         callback = function(res){
             callbackOrigin(res);
-            console.log(this.server)
             ajaxGet(data ,this.server ,"on" ,callback);
         }.bind(this);
         ajaxGet(data ,this.server ,"on" ,callback);
@@ -59,7 +58,7 @@
         }
         xhr.send();
     }
-
+    //when close(refresh) tab(window)
     var oldUnload = window.onbeforeunload;
     var newUnload = function(){
         var i;
