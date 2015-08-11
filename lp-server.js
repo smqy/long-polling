@@ -1,5 +1,5 @@
 var http = require("http");
-
+var urltool = require("urlencode");
 var polling = require("polling");
 
 var uuid = require("uuid");
@@ -143,6 +143,7 @@ LP_http.prototype.init = function(){
 
 //get param obj
 function getParams(url){
+    url = urltool.decode(url ,"utf-8");
     var qs = url.split("?")[1];
     if(qs == undefined){return {}}
     var pms = qs.split("&");
